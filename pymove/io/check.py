@@ -19,6 +19,7 @@ extension2format["pt"] = "torch"
 extension2format["cif"] = "cif"
 extension2format["next_step"] = "aims"
 extension2format["json"] = "json"
+extension2format["xyz"] = "xyz"
 
 ## Convert all formats into the valid extension
 format2extension = {}
@@ -28,6 +29,7 @@ format2extension.update([x for x in zip(extension2format.values(),
 format2extension["aims"] = "in"
 format2extension["geo"] = "in"
 format2extension["geometry"] = "in"
+format2extension["xyz"] = "xyz"
     
 
 def check_parent_dir(file_path):

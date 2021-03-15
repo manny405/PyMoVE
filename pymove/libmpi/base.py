@@ -8,9 +8,9 @@ import pandas as pd
 from pymove import SDS,Structure
 from pymove.io import read,write
 
-from pymatgen import Lattice as LatticeP
-from pymatgen import Structure as StructureP
-from pymatgen import Molecule
+from pymatgen.core import Lattice as LatticeP
+from pymatgen.core import Structure as StructureP
+from pymatgen.core import Molecule
 
 from mpi4py import MPI
 

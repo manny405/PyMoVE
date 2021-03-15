@@ -5,9 +5,9 @@ import numpy as np
 from pymove import Structure,StructDict
 from pymove.io import read,write
 from pymove.driver import BaseDriver_
-from pymove.descriptor.bond_neighborhood import BondNeighborhood
-from pymove.descriptor.R_descriptor import calc_R,ele_R,struct_R
-from pymove.motif.utils import get_molecules,reconstruct_with_whole_molecules, \
+from pymove.molecules.topological_fragments import TopologicalFragments
+from pymove.crystals.R_descriptor import calc_R,ele_R,struct_R
+from pymove.crystals.motif_utils import get_molecules,reconstruct_with_whole_molecules, \
                                construct_smallest_molecule
 from pymove.molecules import align
 try: 
@@ -18,7 +18,8 @@ except:
 
 class FindMolecules(BaseDriver_):
     """
-    Find molecular units in periodic and non-periodic Structures. 
+    Find molecular units in periodic and non-periodic Structures. In addition, 
+    identifies if the molecules that are found are duplicates of one another.
     
     Arguments
     ---------
@@ -63,7 +64,7 @@ class FindMolecules(BaseDriver_):
                  file_format="json",
                  overwrite=False,
                  mult_range=np.arange(1.05, 1.25, 0.005),
-                 verbose=True):
+                 verbose=False):
         """
         Takes in all settings for the FindMolecules class. 
         
@@ -264,9 +265,10 @@ class FindMolecules(BaseDriver_):
             try: 
                 self._reorder_atoms()
             except:
-                print("Was not able to reorder the atom labels using "+
-                  "openbabel. Please note, the atom orderings in "+
-                  "rstruct may not be consistent for different molecules.")
+                pass
+                #print("Was not able to reorder the atom labels using "+
+                #  "openbabel. Please note, the atom orderings in "+
+                #  "rstruct may not be consistent for different molecules.")
         
         atom_idx = 0
         for idx,molecule_struct in enumerate(self.molecules):
@@ -460,7 +462,7 @@ def find_unique_molecules_no_conformation(molecule_struct_list):
     for mult in [0.85, 0.9, 0.95, 1.0, 1.1, 1.15, 1.2, 1.25, 1.3]:
         temp_unique = []
         ## Now check bonding information for each group
-        bn = BondNeighborhood(bond_kw={"mult": mult,
+        bn = TopologicalFragments(bond_kw={"mult": mult,
                                        "skin": 0.0})
         for molecule_group in same_formula:
             if len(molecule_group) == 1:

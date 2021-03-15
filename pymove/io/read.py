@@ -26,7 +26,7 @@ except:
     read_cif_data = False
 
 from pymove import Structure 
-from pymove.io.check import format2extension,check_format,check_file_type,check_ext
+from pymove.io.check import *
 
 implemented_file_formats = ["geo", "geometry", "aims", "json", "cif", 
                             "ase"]
@@ -323,7 +323,8 @@ def import_ase(file_path):
     """
     Import general file using ase.io
     """
-    atoms = ase.io.read(file_path)
+    file_format = check_file_type(file_path)
+    atoms = ase.io.read(file_path, format=file_format)
     struct = Structure.from_ase(atoms)
     file_name = os.path.basename(file_path)
     # Struct ID is filename before decimal 

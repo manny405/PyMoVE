@@ -1,6 +1,7 @@
 
 import numpy as np
 from ase.data import vdw_radii,atomic_numbers,covalent_radii
+from ase.data.colors import jmol_colors
 
 from pymove import Structure
 from pymove.io import read,write
@@ -12,7 +13,7 @@ from scipy.spatial.distance import cdist
 import scipy
 
 from pymove.io import read,write
-from pymove.molecules.utils import align
+from pymove.molecules.align import align
 from pymove.molecules.marching_cubes_lookup import *
 
 from numba import jit
@@ -358,7 +359,6 @@ class MarchingCubes(BaseDriver_):
             volume[grid_region_idx[:,0], grid_region_idx[:,1], grid_region_idx[:,2]] = 1
             
         return volume
-    
     
     
     def marching_cubes(self, volume):

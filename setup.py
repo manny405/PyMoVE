@@ -17,7 +17,7 @@ setup(
       #find_packages(exclude=[]),
       install_requires=['numpy', 'matplotlib', 'sklearn', 
                         'pandas','pymatgen', 'scipy', 'pymongo',
-                        'torch', 'numba',
+                        'torch', 'numba', "mpi4py",
 			             "ase @ https://gitlab.com/ase/tarball/master",
                         "pycifrw",
                         "pyvtk",

@@ -11,8 +11,7 @@ from ase.data import atomic_numbers,atomic_masses_iupac2016
 from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
 from pymove import Structure
-from pymove.molecules import FindMolecules
-
+from pymove.crystals import FindMolecules
 
 
 def get_molecules(struct, 

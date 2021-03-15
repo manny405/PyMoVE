@@ -13,7 +13,6 @@ from ase.io.formats import all_formats as ase_all_formats
 
 from pymove import Structure
 from pymove.io.check import pymove_ext
-from .mbd import xyz_mbd_str
 
 # Acceptable file formats listed here
 ase_file_formats = [x for x in ase_all_formats.keys()]

@@ -12,7 +12,7 @@ from scipy.spatial.distance import cdist
 import scipy
 
 from pymove.io import read,write
-from pymove.molecules.utils import align
+from pymove.molecules.align import align
 from pymove.molecules.marching_cubes_lookup import *
 
 import numba
