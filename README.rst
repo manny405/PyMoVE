@@ -30,7 +30,18 @@ The examples directory steps though all features of the PyMoVE library. These ar
 
 3. Calculating the topological fragment descriptor
 
+.. figure:: static/Fragment_Image.png
+    :scale: 60 %
+    :align: center
+
 4. Calculating the packing accessible surface
+
+.. figure:: static/PAS.png
+    :scale: 60 %
+    :align: center
 
 5. Evaluated the pre-trained model and model training & testing
 
+.. figure:: static/Results.png
+    :scale: 60 %
+    :align: center
