@@ -21,6 +21,7 @@ setup(
 			             "ase @ https://gitlab.com/ase/tarball/master",
                         "pycifrw",
                         "pyvtk",
-                        "pyvista"],
+                        "pyvista",
+                        "mayavi"],
       #ext_modules=[cc.distutils_extension()],
       )

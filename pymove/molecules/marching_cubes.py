@@ -12,6 +12,8 @@ import numpy as np
 from scipy.spatial.distance import cdist
 import scipy
 
+from matplotlib.colors import to_hex
+
 from pymove.io import read,write
 from pymove.molecules.align import align
 from pymove.molecules.marching_cubes_lookup import *
@@ -359,6 +361,57 @@ class MarchingCubes(BaseDriver_):
             volume[grid_region_idx[:,0], grid_region_idx[:,1], grid_region_idx[:,2]] = 1
             
         return volume
+    
+    
+    def struct_to_volume_colors(self, struct=None, spacing=0, center_com=True):
+        if spacing == 0:
+            spacing = self.spacing
+
+        if struct == None:
+            struct = self.struct
+
+        if center_com:
+            self.center_molecule(struct)
+        self.place_atom_centers(struct)
+        self.get_grid(struct)
+
+        min_loc = np.array([self.x_vals[0],self.y_vals[0],self.z_vals[0]])
+        volume = np.zeros((self.x_vals.shape[0],
+                           self.y_vals.shape[0],
+                           self.z_vals.shape[0]))
+
+        ele = struct.geometry["element"]
+        ele_colors = [jmol_colors[atomic_numbers[x]] for x in ele]
+        colors = np.empty(volume.shape, dtype=object)
+
+        for idx,center in enumerate(self.centers):
+            ## Now compute idx to also populate x,y,z directions for given radius
+            rad = self.radii[idx]
+            rad_spacing = np.round(rad / spacing).astype(int)
+
+            #### THIS SUFFERS FROM NUMERICAL ERRORS
+#            all_idx = self.offset_combination_dict[rad_spacing]
+#            temp_grid_coords = all_idx*spacing
+
+            #### GET ONE SPACING LARGER
+            all_idx = self.offset_combination_dict[rad_spacing+1]
+            temp_grid_coords = all_idx*spacing
+            temp_norm = np.linalg.norm(temp_grid_coords,axis=-1)
+            final_idx = np.where(temp_norm < rad)[0]
+            temp_grid_coords = temp_grid_coords[final_idx]
+
+            ### 20200429 Trying to correct grid filling
+            temp_grid_coords = temp_grid_coords+self.centers[idx]-min_loc
+
+            grid_region_idx = np.round(temp_grid_coords / spacing)
+            grid_region_idx = grid_region_idx.astype(int)
+
+            volume[grid_region_idx[:,0], grid_region_idx[:,1], grid_region_idx[:,2]] = 1
+
+            current_color = ele_colors[idx]
+            colors[grid_region_idx[:,0], grid_region_idx[:,1], grid_region_idx[:,2]] = to_hex(current_color)
+
+        return volume,colors
     
     
     def marching_cubes(self, volume):
@@ -1210,6 +1263,10 @@ if __name__ == "__main__":
     import json
     from scipy.optimize import linear_sum_assignment
     import time
+    
+    # s = read("/Users/ibier/Software/PyMoVE/examples/Example_Structures/molecules/rdx.xyz")
+    # mc = MarchingCubes(spacing=0.3)
+    # voxels,colors = mc.struct_to_volume_colors(s)
     
 #    spacing = 0.01
 #    
