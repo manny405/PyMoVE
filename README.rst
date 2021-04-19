@@ -9,7 +9,7 @@ Installation
 
 It's highly recommended to start from an Anaconda distribution of Python, which can be found here_. 
 
-Current full installation requires running two ``setup.py`` scripts. This will be modified in the near future. This is because the algorithm that enables the project marching cube algorithm relys on Numba compilation to run efficiently. The algorithm is still accessible and built in pure Python if there's a user cannot compile with Numba for any reason. But will require some changes to the current code base. 
+Current full installation requires running two ``setup.py`` scripts. This will be modified in the near future. This is because the algorithm that enables the project marching cube algorithm relys on Numba compilation to run efficiently. The algorithm is still accessible and built in pure Python if a user cannot compile with Numba for any reason. But will require some changes. Please open an issue on github if these changes are required for you. 
 
 Running the following commands installs the complete PyMoVE library:
 
@@ -112,7 +112,7 @@ that we want to convert to ``Structure.json`` files, we can type::
 Examples
 ========
 
-The examples directory steps though all features of the PyMoVE library. These are
+The examples directory steps though all features of the PyMoVE library. These are:
 
 1. Finding molecules from the molecular crystal structure
 
@@ -130,7 +130,7 @@ The examples directory steps though all features of the PyMoVE library. These ar
     :scale: 60 %
     :align: center
 
-5. Evaluated the pre-trained model and model training & testing
+5. Model training & testing and evaluating volumes using the pre-trained model
 
 .. figure:: static/Results.png
     :scale: 60 %
