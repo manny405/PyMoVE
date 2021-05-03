@@ -40,39 +40,44 @@ class TopologicalFragments(BaseDriver_):
                    bond_kw={"mult": 1.20,
                             "skin": 0,
                             "update": False},
-                    cycles=False,
                 ):
         self.radius = radius
         self.bond_kw = bond_kw
-        self.cycles=cycles
         if radius != 1:
-            raise Exception("Radius greater than 1 not implemented")
+            raise Exception("Bond radius greater than 1 not implemented")
         
     
     def calc_struct(self, struct):
         self.struct = struct
         self.ele = struct.geometry["element"]
-        g = self._build_graph(struct)
-        n = self._calc_neighbors(g)
-        n = self._sort(g,n)
-        fragments = self._construct_fragment_list(n)
-        fragments,count = np.unique(fragments, return_counts=True)
-        fragments = list(fragments)
-        count = [int(x) for x in count]
         
-        if self.cycles:
-            cycles_frag,cycle_count = self._calc_cycles(g)
-            for cycle_name in cycles_frag:
-                fragments.append(cycle_name)
-            for value in cycle_count:
-                count.append(int(value))
+        frags = []
+        counts = []
+        ### Iterate up to given radius
+        for temp_radius in range(self.radius+1):
+            if temp_radius == 0:
+                temp_frags,temp_counts = self.get_radius_0(self.struct)
+                frags += temp_frags.tolist()
+                counts += temp_counts.tolist()
+            elif temp_radius == 1:
+                g = self._build_graph(struct)
+                n = self._calc_neighbors(g)
+                n = self._sort(g,n)
+                temp_frags = self._construct_fragment_list(n)
+                temp_frags,temp_counts = np.unique(temp_frags, return_counts=True)
+                temp_frags = list(temp_frags)
+                temp_counts = [int(x) for x in temp_counts]
+                frags += temp_frags
+                counts += temp_counts
+            else:
+                raise Exception("Higher bond radii not implemented")
         
-        self.struct.properties["topological_fragments"] = [fragments,
-                    count]
-        self.struct.properties["topological_fragments_fragments"] = fragments
-        self.struct.properties["topological_fragments_counts"] = count
+        self.struct.properties["topological_fragments"] = [frags,
+                    counts]
+        self.struct.properties["topological_fragments_fragments"] = frags
+        self.struct.properties["topological_fragments_counts"] = counts
         
-        return fragments,count
+        return frags,counts
         
     
     def _build_graph(self, struct):
@@ -118,88 +123,6 @@ class TopologicalFragments(BaseDriver_):
             idx_list[0] += neighbor_list
         
         return neighbors
-    
-    
-    def _calc_cycles(self, g, neighborlist=[]):
-        """
-        Calculates the cycles in the graph. 
-        
-        Cycles are sorted in the following way:
-            1. Start with the heaviest atom
-            2. If there is more than one heaviest atom, begin with the one 
-               bonded to the next heaviest. 
-        
-        """
-        if type(g) == Structure:
-            g = self._build_graph(g)
-        
-        if len(neighborlist) == 0:
-            neighborlist = self._calc_neighbors(g)
-        
-        cycles = nx.cycles.cycle_basis(g)
-        cycle_ele = []
-        for cycle_idx in cycles:
-            ele = self.ele[cycle_idx]
-            z = [atomic_numbers[x] for x in ele]
-            number,count = np.unique(z, return_counts=True) 
-            
-            max_number_idx = np.argmax(number)
-            max_number = number[max_number_idx]
-            max_number_count = count[max_number_idx]
-            
-            ## Have more than one heavy atom
-            if max_number_count > 1:
-                max_idx = np.where(z == max_number)[0]
-                
-                ## Find which one is bonded to heaviest element
-                chosen_idx = max_idx[0]
-                max_neighbor = 0
-                for idx in max_idx:
-                    neighbors = neighborlist[idx]
-                    neighbor_ele = self.ele[neighbors]
-                    z = [atomic_numbers[x] for x in neighbor_ele]
-                    temp_max_neighbor = np.max(z)
-                    if temp_max_neighbor > max_neighbor:
-                        max_neighbor = temp_max_neighbor
-                        chosen_idx = idx
-            else:
-                chosen_idx = np.where(z == max_number)[0][0]
-            
-            ### Now build cycle ordering
-            temp_cycle_ele = [ele[chosen_idx]]
-            current_idx = chosen_idx
-            for i in range(len(cycle_idx)-1):
-                current_idx += 1
-                if current_idx == len(cycle_idx):
-                    current_idx -= len(cycle_idx)
-                temp_cycle_ele.append(ele[current_idx])
-            
-            cycle_ele.append(temp_cycle_ele)
-        
-        unique_cycles = []
-        counts = []
-        for idx1,cycle_list1 in enumerate(cycle_ele):
-            
-            if cycle_list1 in unique_cycles:
-                continue
-            
-            unique_cycles.append(cycle_list1)
-            count = 1
-            
-            for idx2,cycle_list2 in enumerate(cycle_ele[idx1+1:]):
-                idx2 += idx1+1
-                if cycle_list1 == cycle_list2:
-                    count += 1
-            
-            counts.append(count)
-        
-        frag_name_list = []
-        for cycle_list in unique_cycles:
-            temp_name = "cycle_"
-            temp_name += "".join(cycle_list)
-            frag_name_list.append(temp_name)
-            
-        return frag_name_list,counts
     
     
     def _sort(self, g, neighbor_list):
@@ -253,6 +176,19 @@ class TopologicalFragments(BaseDriver_):
         fragment_list = [self.struct.geometry["element"][tuple(x)] for x in n]
         fragment_list = [''.join(x) for x in fragment_list]
         return fragment_list
+    
+    
+    def get_radius_0(self, struct=None):
+        """
+        Radius 0 topological fragments are elements and counts
+        
+        """
+        if struct == None:
+            struct = self.struct
+        
+        ele = struct.geometry["element"]
+        return np.unique(ele, return_counts=True)
+        
 
 
 class TopologicalFragmentsModel():

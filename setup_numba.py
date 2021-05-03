@@ -13,6 +13,7 @@ setup(
                 'pymove/crystals',
                 'pymove/libmpi',
                 'pymove/models',
+                'pymove/cli',
                 ],
       #find_packages(exclude=[]),
       install_requires=['numpy', 'matplotlib', 'sklearn', 
@@ -21,4 +22,5 @@ setup(
 			"ase @ https://gitlab.com/ase/tarball/master",
                         "pycifrw"],
       ext_modules=[cc.distutils_extension()],
+      entry_points={'console_scripts': ['pymove=pymove.cli.main:main']},
       )

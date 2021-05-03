@@ -29,7 +29,7 @@ class MoleculeSurface(BaseDriver_):
         Probe radius to use when generating the molecular surface. 
     
     """
-    def __init__(self, spacing=0.3, probe_radius=1.4):
+    def __init__(self, spacing=0.3, probe_radius=3.0):
         self.spacing=spacing
         self.probe_radius=probe_radius
         self.SA_radii = all_radii.copy()+probe_radius

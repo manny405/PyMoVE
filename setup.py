@@ -13,6 +13,7 @@ setup(
                 'pymove/crystals',
                 'pymove/libmpi',
                 'pymove/models',
+                'pymove/cli',
                 ],
       #find_packages(exclude=[]),
       install_requires=['numpy', 'matplotlib', 'sklearn', 
@@ -23,5 +24,6 @@ setup(
                         "pyvtk",
                         "pyvista",
                         "mayavi"],
+      entry_points={'console_scripts': ['pymove=pymove.cli.main:main']},
       #ext_modules=[cc.distutils_extension()],
       )

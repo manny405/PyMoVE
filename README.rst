@@ -20,6 +20,14 @@ Running the following commands installs the complete PyMoVE library:
 
 .. _here: https://www.anaconda.com/products/individual
 
+After installation, basic usage of the solid-form volume prediction can be obtained through the command-line.
+
+. code-block:: bash
+
+    $ pymove examples/Example_Structures/molecules/benzene.xyz
+    Predicted Solid-Form Volume of benzene: 119.93509896777675
+    
+
 Basic Functionality
 ===================
 
