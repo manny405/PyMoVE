@@ -3,6 +3,12 @@ PyMoVE
 ******
 Library and utilities for training volume estimation models with PyMoVE. 
 
+This library is published to accompany the following peer-review article. Please cite this article for any work that makes use of the PyMoVE library.
+
+Bier, I., & Marom, N. (2020). Machine Learned Model for Solid Form Volume Estimation Based on Packing-Accessible Surface and Molecular Topological Fragments. The Journal of Physical Chemistry A, 124(49), 10330-10345.
+
+`doi.org/10.1021/acs.jpca.0c06791 <https://doi.org/10.1021/acs.jpca.0c06791>`_
+
 
 Installation
 ============
