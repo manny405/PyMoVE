@@ -1,7 +1,7 @@
 ******
 PyMoVE
 ******
-Library and utilities for training volume estimation models with PyMoVE. 
+Library and utilities for training volume estimation models with PyMoVE. Capable of calculating the solvent accessible surface area of a molecule using a marching cubes algorithm optimized for molecules. 
 
 This library is published to accompany the following peer-review article. Please cite this article for any work that makes use of the PyMoVE library.
 
