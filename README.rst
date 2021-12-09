@@ -9,6 +9,8 @@ Bier, I., & Marom, N. (2020). Machine Learned Model for Solid Form Volume Estima
 
 `doi.org/10.1021/acs.jpca.0c06791 <https://doi.org/10.1021/acs.jpca.0c06791>`_
 
+`ResearchGate <https://www.researchgate.net/publication/347653898_Machine_Learned_Model_for_Solid_Form_Volume_Estimation_Based_on_Packing-Accessible_Surface_and_Molecular_Topological_Fragments>`_ 
+
 
 Installation
 ============
